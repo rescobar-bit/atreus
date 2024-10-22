@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1058825262294",
+    "project_id": "testa-8f68e",
+    "storage_bucket": "testa-8f68e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1058825262294:android:e1faa3c7c8f4b1b9c8e577",
+        "android_client_info": {
+          "package_name": "com.example.atreus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYYIRoPfwbvBRrnyJx28EasB4xE0rYSCQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
