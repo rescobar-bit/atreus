@@ -1,6 +1,9 @@
+import 'package:atreus/screens/auth/credentials_login_screen.dart';
+import 'package:atreus/screens/auth/microsoft_login_screen.dart';
 import 'package:atreus/widgets/ui/large_sphere.dart';
 import 'package:atreus/widgets/ui/small_sphere.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginMethodScreen extends StatelessWidget {
   const LoginMethodScreen({super.key});
@@ -62,8 +65,7 @@ class LoginMethodScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 30,),
                   ElevatedButton(
-                    onPressed: () {
-                    },
+                    onPressed: () => context.goNamed(MicrosoftLoginScreen.routeName),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       backgroundColor: Colors.white,
@@ -95,8 +97,7 @@ class LoginMethodScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20,),
                   ElevatedButton(
-                    onPressed: () {
-                    },
+                    onPressed: () => context.goNamed(CredentialsLoginScreen.routeName),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       backgroundColor: Colors.white,
