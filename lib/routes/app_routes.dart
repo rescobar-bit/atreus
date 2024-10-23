@@ -29,7 +29,7 @@ class AppRoutes {
       routes: routes,
       navigatorKey: navigatorKey,
       redirect: (context, state) {
-        return null;
+        return "/${CredentialsLoginScreen.routeName}";
       },
     );
   }

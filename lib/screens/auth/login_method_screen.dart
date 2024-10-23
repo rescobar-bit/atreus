@@ -17,31 +17,12 @@ class LoginMethodScreen extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            const Positioned(
-              top: -50,
-              left: -50,
-              child: LargeSphere(),
-            ),
-            const Positioned(
-              top: 200,
-              right: -50,
-              child: LargeSphere(),
-            ),
-            const Positioned(
-              bottom: -80,
-              left: 100,
-              child: LargeSphere(),
-            ),
-            const Positioned(
-              top: 90,
-              left: -40,
-              child: SmallSphere(),
-            ),
-            const Positioned(
-              top: 150,
-              right: -30,
-              child: SmallSphere(),
-            ),
+            const Positioned(top: -50, left: -50, child: LargeSphere(),),
+            const Positioned(top: 200, right: -50, child: LargeSphere(),),
+            const Positioned(bottom: -120,left: 100,child: LargeSphere(),),
+            const Positioned(bottom: 40,left: -60,child: SmallSphere(),),
+            const Positioned(top: 90,left: -40,child: SmallSphere(),),
+            const Positioned(top: 150,right: -30,child: SmallSphere(),),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
               child: Column(
