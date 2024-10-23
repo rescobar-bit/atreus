@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 child: Column(
                   children: [
-                    const Text('Correo electrónico'),
+                    const Text('Correo electrónicode'),
                     const SizedBox(height: 10,),
                     TextField(
                       controller: _emailController,
