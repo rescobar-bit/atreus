@@ -1,4 +1,4 @@
-import 'package:atreus/screens/auth/login_screen.dart';
+import 'package:atreus/screens/auth/login_method_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,7 +7,7 @@ class AppRoutes {
     List<RouteBase> routes = [
       GoRoute(
         path: '/',
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) => const LoginMethodScreen(),
       )
     ];
 
