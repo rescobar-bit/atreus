@@ -4,6 +4,8 @@ import 'package:atreus/widgets/ui/large_sphere.dart';
 import 'package:atreus/widgets/ui/small_sphere.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -15,9 +17,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormBuilderState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
 
   Future<void> login() async {
     try {
@@ -48,26 +53,56 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _emailFocusNode.addListener(() {
+      if (!_emailFocusNode.hasFocus) _formKey.currentState?.fields['email']?.validate();
+    });
+    _passwordFocusNode.addListener(() {
+      if (!_passwordFocusNode.hasFocus) _formKey.currentState?.fields['password']?.validate();
+    });
+  }
+
+  @override
+  void dispose() {
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void submit() async {
+    bool? isValidated = _formKey.currentState?.saveAndValidate();
+    if (isValidated!) await login();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final inputBorderStyle = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(20),
+      borderSide: BorderSide(
+        color: Colors.lightBlue.shade700,
+        width: .5,
+      ),
+    );
+    final inputBorderErrorStyle = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(20),
+      borderSide: BorderSide(
+        color: Colors.red.shade400,
+        width: .5,
+      ),
+    );
     InputDecoration inputDecoration(String placeholder) {
       return InputDecoration(
         filled: true,
         fillColor: const Color(0xFFF8F8FF),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(
-            color: Colors.lightBlue.shade700,
-            width: .5,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(
-            color: Colors.blue,
-            width: .5,
-          ),
-        ),
+        disabledBorder: inputBorderStyle,
+        enabledBorder: inputBorderStyle,
+        border: inputBorderStyle,
+        focusedErrorBorder: inputBorderStyle,
+        errorBorder: inputBorderErrorStyle,
         contentPadding: const EdgeInsets.only(left: 10),
         hintText: placeholder,
         hintStyle: TextStyle(color: Colors.lightBlue.shade200, fontWeight: FontWeight.w400)
@@ -110,34 +145,50 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const SizedBox(height: 20,),
-                      Text(
-                        'Correo electrónico',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.lightBlue.shade700,
-                        ),
-                      ),
-                      const SizedBox(height: 6,),
-                      AtreusInput(
-                        name: 'email',
-                        controller: _emailController,
-                        inputStyle: inputDecoration('myemail@mail.com'),
-                      ),
-                      const SizedBox(height: 30,),
-                      Text(
-                        'Contraseña',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.lightBlue.shade700,
-                        ),
-                      ),
-                      const SizedBox(height: 6,),
-                      AtreusInput(
-                        name: 'password',
-                        controller: _passwordController,
-                        inputStyle: inputDecoration('x x x x x x x x'),
+                      FormBuilder(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Correo electrónico',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.lightBlue.shade700,
+                              ),
+                            ),
+                            const SizedBox(height: 6,),
+                            AtreusInput(
+                              name: 'email',
+                              controller: _emailController,
+                              inputStyle: inputDecoration('myemail@mail.com'),
+                              validators: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(errorText: 'Debes proporcionar un correo electrónico'),
+                                FormBuilderValidators.maxLength(40, errorText: 'El nombre de usuario debe tener máximo 40 caracteres'),
+                              ]),
+                            ),
+                            const SizedBox(height: 30,),
+                            Text(
+                              'Contraseña',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.lightBlue.shade700,
+                              ),
+                            ),
+                            const SizedBox(height: 6,),
+                            AtreusInput(
+                              name: 'password',
+                              controller: _passwordController,
+                              inputStyle: inputDecoration('x x x x x x x x'),
+                              validators: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(errorText: 'Debes proporcionar una contraseña'),
+                                FormBuilderValidators.maxLength(40, errorText: 'La contraseña debe tener máximo 40 caracteres'),
+                              ]),
+                            ),
+                          ],
+                        )
                       ),
                       const SizedBox(height: 12,),
                       Align(
@@ -155,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(
                         width: size.width,
                         child: ElevatedButton(
-                          onPressed: login,
+                          onPressed: submit,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             backgroundColor: Colors.lightBlue.shade700,
