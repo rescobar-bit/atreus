@@ -1,7 +1,10 @@
+import 'package:atreus/screens/auth/microsoft_login_screen.dart';
+import 'package:atreus/widgets/general/atreus_input.dart';
 import 'package:atreus/widgets/ui/large_sphere.dart';
 import 'package:atreus/widgets/ui/small_sphere.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -37,14 +40,8 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       if (mounted) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return Container(
-              color: Colors.white,
-              child: const Text("Error")
-            );
-          },
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Credenciales invalidas')),
         );
       }
     }
@@ -53,184 +50,165 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    InputDecoration inputDecoration(String placeholder) {
+      return InputDecoration(
+        filled: true,
+        fillColor: const Color(0xFFF8F8FF),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            color: Colors.lightBlue.shade700,
+            width: .5,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(
+            color: Colors.blue,
+            width: .5,
+          ),
+        ),
+        contentPadding: const EdgeInsets.only(left: 10),
+        hintText: placeholder,
+        hintStyle: TextStyle(color: Colors.lightBlue.shade200, fontWeight: FontWeight.w400)
+      );
+    }
     return Scaffold(
       backgroundColor: const Color(0xFFF8F8FF),
       body: SafeArea(
-        child: Stack(
-          children: [
-            const Positioned(top: -50,left: -130,child: LargeSphere(),),
-            const Positioned(top: 280,right: -120,child: LargeSphere(),),
-            const Positioned(bottom: 80,left: -150,child: LargeSphere(),),
-            const Positioned(top: 90,left: -40,child: SmallSphere(),),
-            const Positioned(top: 80,right: 40,child: SmallSphere(),),
-            const Positioned(bottom: -50,right: -60,child: SmallSphere(),),
-            SizedBox(
-              width: size.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 24,),
-                        Center(
-                          child: SizedBox(
-                            width: size.width * .7,
-                            height: size.height * .18,
-                            child: const Placeholder(),
-                          ),
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: size.height,
+            child: Stack(
+              children: [
+                const Positioned(top: -50,left: -130,child: LargeSphere(),),
+                const Positioned(top: 280,right: -120,child: LargeSphere(),),
+                const Positioned(bottom: 80,left: -150,child: LargeSphere(),),
+                const Positioned(top: 90,left: -40,child: SmallSphere(),),
+                const Positioned(top: 80,right: 40,child: SmallSphere(),),
+                const Positioned(bottom: -50,right: -60,child: SmallSphere(),),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 24,),
+                      Center(
+                        child: SizedBox(
+                          width: size.width * .7,
+                          height: size.height * .18,
+                          child: const Placeholder(),
                         ),
-                        const SizedBox(height: 40,),
-                        Text(
-                          'Iniciar sesión',
+                      ),
+                      const SizedBox(height: 40,),
+                      Text(
+                        'Iniciar sesión',
+                        style: TextStyle(
+                          fontSize: 34,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.lightBlue.shade700,
+                        ),
+                      ),
+                      const SizedBox(height: 20,),
+                      Text(
+                        'Correo electrónico',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.lightBlue.shade700,
+                        ),
+                      ),
+                      const SizedBox(height: 6,),
+                      AtreusInput(
+                        name: 'email',
+                        controller: _emailController,
+                        inputStyle: inputDecoration('myemail@mail.com'),
+                      ),
+                      const SizedBox(height: 30,),
+                      Text(
+                        'Contraseña',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.lightBlue.shade700,
+                        ),
+                      ),
+                      const SizedBox(height: 6,),
+                      AtreusInput(
+                        name: 'password',
+                        controller: _passwordController,
+                        inputStyle: inputDecoration('x x x x x x x x'),
+                      ),
+                      const SizedBox(height: 12,),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Text(
+                          'Olvide mi contraseña',
                           style: TextStyle(
-                            fontSize: 34,
-                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
                             color: Colors.lightBlue.shade700,
+                            fontWeight: FontWeight.w600
                           ),
                         ),
-                        const SizedBox(height: 20,),
-                        Text(
-                          'Correo electrónico',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.lightBlue.shade700,
-                          ),
-                        ),
-                        const SizedBox(height: 6,),
-                        TextField(
-                          controller: _emailController,
-                          style: const TextStyle(fontSize: 12),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: const Color(0xFFF8F8FF),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(
-                                color: Colors.lightBlue.shade700,
-                                width: .5,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: const BorderSide(
-                                color: Colors.blue,
-                                width: .5,
-                              ),
-                            ),
-                            contentPadding: const EdgeInsets.only(left: 10),
-                            hintText: 'ejemplo@gmail.com',
-                          ),
-                        ),
-                        const SizedBox(height: 30,),
-                        Text(
-                          'Contraseña',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.lightBlue.shade700,
-                          ),
-                        ),
-                        const SizedBox(height: 6,),
-                        TextField(
-                          obscureText: true,
-                          controller: _passwordController,
-                          style: const TextStyle(fontSize: 12),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: const Color(0xFFF8F8FF),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(
-                                color: Colors.lightBlue.shade700,
-                                width: .5,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: const BorderSide(
-                                color: Colors.blue,
-                                width: .5,
-                              ),
-                            ),
-                            contentPadding: const EdgeInsets.only(left: 10),
-                            hintText: '* * * * * * * *',
-                          ),
-                        ),
-                        const SizedBox(height: 12,),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Text(
-                            'Olvide mi contraseña',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.lightBlue.shade700,
-                              fontWeight: FontWeight.w600
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 40,),
-                        SizedBox(
-                          width: size.width,
-                          child: ElevatedButton(
-                            onPressed: login,
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              backgroundColor: Colors.lightBlue.shade700,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              elevation: 2,
-                              shadowColor: Colors.black.withOpacity(0.3),
-                            ),
-                            child: const Text(
-                              'Iniciar sesión',
-                              style: TextStyle(fontSize: 16, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20,),
-                        Center(
-                          child: Text('o', style: TextStyle(fontSize: 20, color: Colors.lightBlue.shade700),)
-                        ),
-                        const SizedBox(height: 20,),
-                        ElevatedButton(
-                          onPressed: () => (),
+                      ),
+                      const SizedBox(height: 40,),
+                      SizedBox(
+                        width: size.width,
+                        child: ElevatedButton(
+                          onPressed: login,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 10),
-                            backgroundColor: Colors.white,
+                            backgroundColor: Colors.lightBlue.shade700,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                             elevation: 2,
                             shadowColor: Colors.black.withOpacity(0.3),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.window_rounded,
-                                size: 30,
-                                color: Colors.lightBlue.shade700,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                'Continuar con Microsoft',
-                                style: TextStyle(fontSize: 16, color: Colors.lightBlue.shade700),
-                              ),
-                            ],
+                          child: const Text(
+                            'Iniciar sesión',
+                            style: TextStyle(fontSize: 16, color: Colors.white),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 20,),
+                      Center(
+                        child: Text('o', style: TextStyle(fontSize: 20, color: Colors.lightBlue.shade700),)
+                      ),
+                      const SizedBox(height: 20,),
+                      ElevatedButton(
+                        onPressed: () => context.goNamed(MicrosoftLoginScreen.routeName),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          elevation: 2,
+                          shadowColor: Colors.black.withOpacity(0.3),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.window_rounded,
+                              size: 26,
+                              color: Colors.lightBlue.shade700,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              'Continuar con Microsoft',
+                              style: TextStyle(fontSize: 16, color: Colors.lightBlue.shade700),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              )
-            )
-          ],
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
