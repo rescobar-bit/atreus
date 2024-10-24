@@ -1,5 +1,4 @@
-import 'package:atreus/screens/auth/credentials_login_screen.dart';
-import 'package:atreus/screens/auth/login_method_screen.dart';
+import 'package:atreus/screens/auth/login_screen.dart';
 import 'package:atreus/screens/auth/microsoft_login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -9,13 +8,8 @@ class AppRoutes {
     List<RouteBase> routes = [
       GoRoute(
         path: '/',
-        builder: (context, state) => const LoginMethodScreen(),
+        builder: (context, state) => const LoginScreen(),
         routes: [
-          GoRoute(
-            path: CredentialsLoginScreen.routeName,
-            name: CredentialsLoginScreen.routeName,
-            builder: (context, state) => const CredentialsLoginScreen(),
-          ),
           GoRoute(
             path: MicrosoftLoginScreen.routeName,
             name: MicrosoftLoginScreen.routeName,
@@ -29,7 +23,7 @@ class AppRoutes {
       routes: routes,
       navigatorKey: navigatorKey,
       redirect: (context, state) {
-        return "/${CredentialsLoginScreen.routeName}";
+        return null;
       },
     );
   }

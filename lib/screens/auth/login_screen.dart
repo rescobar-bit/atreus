@@ -3,15 +3,15 @@ import 'package:atreus/widgets/ui/small_sphere.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class CredentialsLoginScreen extends StatefulWidget {
-  const CredentialsLoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
   static const String routeName = 'credentials-login';
 
   @override
-  State<CredentialsLoginScreen> createState() => _CredentialsLoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _CredentialsLoginScreenState extends State<CredentialsLoginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -59,7 +59,7 @@ class _CredentialsLoginScreenState extends State<CredentialsLoginScreen> {
         child: Stack(
           children: [
             const Positioned(top: -50,left: -130,child: LargeSphere(),),
-            const Positioned(top: 400,right: -120,child: LargeSphere(),),
+            const Positioned(top: 280,right: -120,child: LargeSphere(),),
             const Positioned(bottom: 80,left: -150,child: LargeSphere(),),
             const Positioned(top: 90,left: -40,child: SmallSphere(),),
             const Positioned(top: 80,right: 40,child: SmallSphere(),),
@@ -74,35 +74,33 @@ class _CredentialsLoginScreenState extends State<CredentialsLoginScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        InkWell(
-                          onTap: () => Navigator.pop(context),
-                          child: Container(
-                            padding: const EdgeInsets.all(2),
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                            child: Icon(Icons.arrow_back, color: Colors.lightBlue.shade700, size: 30,),
-                          ),
-                        ),
                         const SizedBox(height: 24,),
                         Center(
                           child: SizedBox(
-                            width: size.width * .6,
-                            height: size.height * .14,
+                            width: size.width * .7,
+                            height: size.height * .18,
                             child: const Placeholder(),
                           ),
                         ),
                         const SizedBox(height: 40,),
                         Text(
-                          'Correo electrónico',
+                          'Iniciar sesión',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 34,
                             fontWeight: FontWeight.w400,
                             color: Colors.lightBlue.shade700,
                           ),
                         ),
-                        const SizedBox(height: 10,),
+                        const SizedBox(height: 20,),
+                        Text(
+                          'Correo electrónico',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.lightBlue.shade700,
+                          ),
+                        ),
+                        const SizedBox(height: 6,),
                         TextField(
                           controller: _emailController,
                           style: const TextStyle(fontSize: 12),
@@ -131,12 +129,12 @@ class _CredentialsLoginScreenState extends State<CredentialsLoginScreen> {
                         Text(
                           'Contraseña',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.w400,
                             color: Colors.lightBlue.shade700,
                           ),
                         ),
-                        const SizedBox(height: 10,),
+                        const SizedBox(height: 6,),
                         TextField(
                           obscureText: true,
                           controller: _passwordController,
@@ -162,27 +160,71 @@ class _CredentialsLoginScreenState extends State<CredentialsLoginScreen> {
                             hintText: '* * * * * * * *',
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    width: size.width * .7,
-                    child: ElevatedButton(
-                      onPressed: login,
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        backgroundColor: Colors.lightBlue.shade700,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                        const SizedBox(height: 12,),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Text(
+                            'Olvide mi contraseña',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.lightBlue.shade700,
+                              fontWeight: FontWeight.w600
+                            ),
+                          ),
                         ),
-                        elevation: 2,
-                        shadowColor: Colors.black.withOpacity(0.3),
-                      ),
-                      child: const Text(
-                        'Iniciar sesión',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
+                        const SizedBox(height: 40,),
+                        SizedBox(
+                          width: size.width,
+                          child: ElevatedButton(
+                            onPressed: login,
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              backgroundColor: Colors.lightBlue.shade700,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              elevation: 2,
+                              shadowColor: Colors.black.withOpacity(0.3),
+                            ),
+                            child: const Text(
+                              'Iniciar sesión',
+                              style: TextStyle(fontSize: 16, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20,),
+                        Center(
+                          child: Text('o', style: TextStyle(fontSize: 20, color: Colors.lightBlue.shade700),)
+                        ),
+                        const SizedBox(height: 20,),
+                        ElevatedButton(
+                          onPressed: () => (),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            elevation: 2,
+                            shadowColor: Colors.black.withOpacity(0.3),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.window_rounded,
+                                size: 30,
+                                color: Colors.lightBlue.shade700,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                'Continuar con Microsoft',
+                                style: TextStyle(fontSize: 16, color: Colors.lightBlue.shade700),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
